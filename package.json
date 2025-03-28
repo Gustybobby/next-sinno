@@ -1,12 +1,15 @@
 {
-  "name": "next-sinno",
-  "version": "1.0.0",
+  "name": "@gustybobby/next-sinno",
+  "version": "1.0.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rimraf dist && tsc --declaration",
     "lint:fix": "npx eslint . --fix"
   },
+  "files": [
+    "dist/*"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
