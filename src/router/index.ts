@@ -2,14 +2,14 @@ import type { SinnoLogger } from "../logger";
 import type { SinnoRouterConfig } from "./config";
 import type { SinnoRouteResponse } from "./response";
 
-type NextHTTPMethods = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+export type NextHTTPMethods = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
-type NextMethodHandler<
+export type NextMethodHandler<
   Req extends Request,
   NextParams extends BaseNextParams,
 > = (req: Req, { params }: { params: NextParams }) => Promise<Response>;
 
-type NextMethodHandlers<
+export type NextMethodHandlers<
   Req extends Request,
   NextParams extends BaseNextParams,
 > = Partial<Record<NextHTTPMethods, NextMethodHandler<Req, NextParams>>>;
@@ -61,11 +61,11 @@ function routeMethodMapper<
     : undefined;
 }
 
-type SinnoMethodHandler<NextParams extends BaseNextParams, Results> = (
+export type SinnoMethodHandler<NextParams extends BaseNextParams, Results> = (
   args: SinnoRouterMethodArgs<NextParams>,
 ) => Promise<SinnoRouteResponse<Results>>;
 
-type SinnoMethodHandlers<
+export type SinnoMethodHandlers<
   NextParams extends BaseNextParams,
   MethodResults extends Record<NextHTTPMethods, unknown>,
 > = {
@@ -75,9 +75,9 @@ type SinnoMethodHandlers<
   >;
 };
 
-type BaseNextParams = Record<string, string | string[]>;
+export type BaseNextParams = Record<string, string | string[]>;
 
-interface SinnoRouterMethodArgs<NextParams extends BaseNextParams> {
+export interface SinnoRouterMethodArgs<NextParams extends BaseNextParams> {
   req: Request;
   params: NextParams;
   logger: SinnoLogger;
