@@ -20,7 +20,7 @@ export function createSinnoRouter<
   Logger extends SinnoLogger,
   MethodResults extends Partial<Record<NextHTTPMethods, unknown>>,
 >(
-  handlers: SinnoMethodHandlers<NextParams, MethodResults>,
+  handlers: SinnoMethodHandlers<Req, NextParams, Logger, MethodResults>,
   config: SinnoRouterConfig<Req, Logger>,
 ): NextMethodHandlers<Req, NextParams> {
   return {
@@ -53,7 +53,7 @@ function routeMethodMapper<
   Logger extends SinnoLogger,
   Results,
 >(
-  handler: SinnoMethodHandler<NextParams, Results> | undefined,
+  handler: SinnoMethodHandler<Req, NextParams, Logger, Results> | undefined,
   config: SinnoRouterConfig<Req, Logger>,
 ): NextMethodHandler<Req, NextParams> | undefined {
   return handler
@@ -61,26 +61,39 @@ function routeMethodMapper<
     : undefined;
 }
 
-export type SinnoMethodHandler<NextParams extends BaseNextParams, Results> = (
-  args: SinnoRouterMethodArgs<NextParams>,
+export type SinnoMethodHandler<
+  Req extends Request,
+  NextParams extends BaseNextParams,
+  Logger extends SinnoLogger,
+  Results,
+> = (
+  args: SinnoRouterMethodArgs<Req, NextParams, Logger>,
 ) => Promise<SinnoRouteResponse<Results>>;
 
 export type SinnoMethodHandlers<
+  Req extends Request,
   NextParams extends BaseNextParams,
+  Logger extends SinnoLogger,
   MethodResults extends Partial<Record<NextHTTPMethods, unknown>>,
 > = {
   [method in NextHTTPMethods]?: SinnoMethodHandler<
+    Req,
     NextParams,
+    Logger,
     MethodResults[method]
   >;
 };
 
 export type BaseNextParams = Record<string, string | string[]>;
 
-export interface SinnoRouterMethodArgs<NextParams extends BaseNextParams> {
-  req: Request;
+export interface SinnoRouterMethodArgs<
+  Req extends Request,
+  NextParams extends BaseNextParams,
+  Logger extends SinnoLogger,
+> {
+  req: Req;
   params: NextParams;
-  logger: SinnoLogger;
+  logger: Logger;
 }
 
 async function handleSinnoRouterMethod<
@@ -92,7 +105,7 @@ async function handleSinnoRouterMethod<
   req: Req,
   params: NextParams,
   handler: (
-    args: SinnoRouterMethodArgs<NextParams>,
+    args: SinnoRouterMethodArgs<Req, NextParams, Logger>,
   ) => Promise<SinnoRouteResponse<Results>>,
   config: SinnoRouterConfig<Req, Logger>,
 ): Promise<Response> {

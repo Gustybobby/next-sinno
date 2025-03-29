@@ -6,14 +6,14 @@ export type NextMethodHandler<Req extends Request, NextParams extends BaseNextPa
     params: NextParams;
 }) => Promise<Response>;
 export type NextMethodHandlers<Req extends Request, NextParams extends BaseNextParams> = Partial<Record<NextHTTPMethods, NextMethodHandler<Req, NextParams>>>;
-export declare function createSinnoRouter<Req extends Request, NextParams extends BaseNextParams, Logger extends SinnoLogger, MethodResults extends Partial<Record<NextHTTPMethods, unknown>>>(handlers: SinnoMethodHandlers<NextParams, MethodResults>, config: SinnoRouterConfig<Req, Logger>): NextMethodHandlers<Req, NextParams>;
-export type SinnoMethodHandler<NextParams extends BaseNextParams, Results> = (args: SinnoRouterMethodArgs<NextParams>) => Promise<SinnoRouteResponse<Results>>;
-export type SinnoMethodHandlers<NextParams extends BaseNextParams, MethodResults extends Partial<Record<NextHTTPMethods, unknown>>> = {
-    [method in NextHTTPMethods]?: SinnoMethodHandler<NextParams, MethodResults[method]>;
+export declare function createSinnoRouter<Req extends Request, NextParams extends BaseNextParams, Logger extends SinnoLogger, MethodResults extends Partial<Record<NextHTTPMethods, unknown>>>(handlers: SinnoMethodHandlers<Req, NextParams, Logger, MethodResults>, config: SinnoRouterConfig<Req, Logger>): NextMethodHandlers<Req, NextParams>;
+export type SinnoMethodHandler<Req extends Request, NextParams extends BaseNextParams, Logger extends SinnoLogger, Results> = (args: SinnoRouterMethodArgs<Req, NextParams, Logger>) => Promise<SinnoRouteResponse<Results>>;
+export type SinnoMethodHandlers<Req extends Request, NextParams extends BaseNextParams, Logger extends SinnoLogger, MethodResults extends Partial<Record<NextHTTPMethods, unknown>>> = {
+    [method in NextHTTPMethods]?: SinnoMethodHandler<Req, NextParams, Logger, MethodResults[method]>;
 };
 export type BaseNextParams = Record<string, string | string[]>;
-export interface SinnoRouterMethodArgs<NextParams extends BaseNextParams> {
-    req: Request;
+export interface SinnoRouterMethodArgs<Req extends Request, NextParams extends BaseNextParams, Logger extends SinnoLogger> {
+    req: Req;
     params: NextParams;
-    logger: SinnoLogger;
+    logger: Logger;
 }
