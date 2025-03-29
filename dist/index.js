@@ -14,10 +14,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createSinnoRouter = createSinnoRouter;
-function createSinnoRouter(config, controller) {
-    return controller.mapRoutes(config);
-}
-__exportStar(require("./controller"), exports);
 __exportStar(require("./logger"), exports);
 __exportStar(require("./router"), exports);
+__exportStar(require("./router/config"), exports);
+__exportStar(require("./router/response"), exports);

@@ -9,8 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handleSinnoRouter = handleSinnoRouter;
-function handleSinnoRouter(req, params, handler, config) {
+exports.createSinnoRouter = createSinnoRouter;
+function createSinnoRouter(handlers, config) {
+    return {
+        GET: routeMethodMapper(handlers.GET, config),
+        POST: routeMethodMapper(handlers.POST, config),
+        PUT: routeMethodMapper(handlers.PUT, config),
+        PATCH: routeMethodMapper(handlers.PATCH, config),
+        DELETE: routeMethodMapper(handlers.DELETE, config),
+    };
+}
+function routeMethodMapper(handler, config) {
+    return handler
+        ? (req, { params }) => handleSinnoRouterMethod(req, params, handler, config)
+        : undefined;
+}
+function handleSinnoRouterMethod(req, params, handler, config) {
     return __awaiter(this, void 0, void 0, function* () {
         const logger = yield config.setupLoggerHandler({ req });
         try {
