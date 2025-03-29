@@ -18,7 +18,7 @@ export function createSinnoRouter<
   Req extends Request,
   NextParams extends BaseNextParams,
   Logger extends SinnoLogger,
-  MethodResults extends Record<NextHTTPMethods, unknown>,
+  MethodResults extends Partial<Record<NextHTTPMethods, unknown>>,
 >(
   handlers: SinnoMethodHandlers<NextParams, MethodResults>,
   config: SinnoRouterConfig<Req, Logger>,
@@ -67,7 +67,7 @@ export type SinnoMethodHandler<NextParams extends BaseNextParams, Results> = (
 
 export type SinnoMethodHandlers<
   NextParams extends BaseNextParams,
-  MethodResults extends Record<NextHTTPMethods, unknown>,
+  MethodResults extends Partial<Record<NextHTTPMethods, unknown>>,
 > = {
   [method in NextHTTPMethods]?: SinnoMethodHandler<
     NextParams,
